@@ -1,3 +1,4 @@
+
 def mathFunction():
     no1 = int(input("Enter first number: "))  # getno1
     no2 = int(input("Enter second number: "))  # getno2
