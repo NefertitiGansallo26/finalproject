@@ -3,12 +3,23 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Load the cleaned data
-# Replace with the correct path
-file_path =file_path = r'C:\Users\Theresa Gansallo\OneDrive\Documents\UNI 2nd year\PROFESSIONAL SOFTWARE AND CAREER PRACTICES(Edward)\finalproject\literacy-rate-vs-gdp-per-capita.csv'
+file_path = r'C:\Users\Theresa Gansallo\OneDrive\Documents\UNI 2nd year\PROFESSIONAL SOFTWARE AND CAREER PRACTICES(Edward)\finalproject\literacy-rate-vs-gdp-per-capita.csv'
 
 latest_data = pd.read_csv(file_path)
 
+# Clean column names by stripping leading/trailing spaces
+latest_data.columns = latest_data.columns.str.strip()
 
+# Rename columns for simplicity
+latest_data = latest_data.rename(columns={
+    "Adult literacy rate, population 15+ years, both sexes (%)": "Literacy_Rate",
+    "GDP per capita, PPP (constant 2017 international $)": "GDP_Per_Capita",
+    "Population (historical)": "Population",
+    "World regions according to OWID": "Region"
+})
+
+# Print column names to confirm the changes
+print(latest_data.columns)
 
 # Scatter Plot: Literacy Rate vs GDP per Capita
 plt.figure(figsize=(10, 6))
