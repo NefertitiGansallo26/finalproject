@@ -89,31 +89,31 @@ data = data.dropna(subset=['Literacy_Rate', 'GDP_Per_Capita', 'Continent'])
 continent_averages = data.groupby('Continent')[['GDP_Per_Capita', 'Literacy_Rate']].mean()
 
 # Create a dual-axis bar chart
-fig, ax1 = plt.subplots(figsize=(12, 8))
+fig, ax1 = plt.subplots(figsize=(9, 7))
 
 # Plot GDP per Capita
 ax1.bar(
     continent_averages.index,
     continent_averages['GDP_Per_Capita'],
-    color='skyblue',
+    color='orange',
     label='GDP per Capita'
 )
 ax1.set_xlabel('Continent', fontsize=14)
-ax1.set_ylabel('GDP per Capita (USD)', fontsize=14, color='skyblue')
-ax1.tick_params(axis='y', labelcolor='skyblue')
+ax1.set_ylabel('GDP per Capita (USD)', fontsize=14, color='orange')
+ax1.tick_params(axis='y', labelcolor='orange')
 
 # Add secondary axis for Literacy Rate
 ax2 = ax1.twinx()
 ax2.plot(
     continent_averages.index,
     continent_averages['Literacy_Rate'],
-    color='orange',
+    color='purple',
     marker='o',
     linewidth=2,
     label='Literacy Rate'
 )
-ax2.set_ylabel('Literacy Rate (%)', fontsize=14, color='orange')
-ax2.tick_params(axis='y', labelcolor='orange')
+ax2.set_ylabel('Literacy Rate (%)', fontsize=14, color='purple')
+ax2.tick_params(axis='y', labelcolor='purple')
 
 # Add legends
 ax1.legend(loc='upper left')
