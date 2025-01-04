@@ -12,7 +12,7 @@ data = data.rename(columns={
     "GDP per capita, PPP (constant 2017 international $)": "GDP_Per_Capita"
 })
 
-# Define a mapping of countries to continents
+# Comprehensive mapping of all countries to continents
 continent_mapping = {
     # Africa
     'Algeria': 'Africa', 'Angola': 'Africa', 'Benin': 'Africa', 'Botswana': 'Africa',
@@ -82,45 +82,46 @@ continent_mapping = {
 # Map countries to continents
 data['Continent'] = data['Entity'].map(continent_mapping)
 
-# Check for unmapped countries
-unmapped = data[data['Continent'].isnull()]['Entity'].unique()
-print(f"Unmapped countries: {unmapped}")
-
-# Filter rows with valid data
+# Filter for valid data and mapped countries
 data = data.dropna(subset=['Literacy_Rate', 'GDP_Per_Capita', 'Continent'])
 
-# Scatter Plot with Regression Line
-plt.figure(figsize=(12, 8))
+# Group by continent and calculate averages
+continent_averages = data.groupby('Continent')[['GDP_Per_Capita', 'Literacy_Rate']].mean()
 
-# Scatterplot
-scatter = sns.scatterplot(
-    data=data,
-    x='Literacy_Rate',
-    y='GDP_Per_Capita',
-    hue='Continent',
-    palette='Set2',
-    s=20
+# Create a dual-axis bar chart
+fig, ax1 = plt.subplots(figsize=(12, 8))
+
+# Plot GDP per Capita
+ax1.bar(
+    continent_averages.index,
+    continent_averages['GDP_Per_Capita'],
+    color='skyblue',
+    label='GDP per Capita'
 )
+ax1.set_xlabel('Continent', fontsize=14)
+ax1.set_ylabel('GDP per Capita (USD)', fontsize=14, color='skyblue')
+ax1.tick_params(axis='y', labelcolor='skyblue')
 
-# Regression Line
-sns.regplot(
-    data=data,
-    x='Literacy_Rate',
-    y='GDP_Per_Capita',
-    scatter=False,
-    color='black',
-    line_kws={"label": "Regression Line"}
+# Add secondary axis for Literacy Rate
+ax2 = ax1.twinx()
+ax2.plot(
+    continent_averages.index,
+    continent_averages['Literacy_Rate'],
+    color='orange',
+    marker='o',
+    linewidth=2,
+    label='Literacy Rate'
 )
+ax2.set_ylabel('Literacy Rate (%)', fontsize=14, color='orange')
+ax2.tick_params(axis='y', labelcolor='orange')
 
-# Legend
-handles, labels = scatter.get_legend_handles_labels()
-handles.append(plt.Line2D([0], [0], color='black', lw=2, label='Regression Line'))
-plt.legend(handles=handles, title='Legend', bbox_to_anchor=(1.05, 1), loc='upper left')
+# Add legends
+ax1.legend(loc='upper left')
+ax2.legend(loc='upper right')
 
-# Final Plot Customizations
-plt.title('Literacy Rate vs GDP per Capita by Continent', fontsize=16)
-plt.xlabel('Literacy Rate (%)', fontsize=14)
-plt.ylabel('GDP per Capita (USD)', fontsize=14)
-plt.grid(True, linestyle='--', alpha=0.7)
+# Title and Grid
+plt.title('GDP per Capita and Literacy Rate by Continent', fontsize=16)
+plt.grid(axis='x', linestyle='--', alpha=0.7)
 plt.tight_layout()
+
 plt.show()
