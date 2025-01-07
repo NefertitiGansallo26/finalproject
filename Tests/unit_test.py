@@ -70,6 +70,6 @@ class TestPlotPipeline(unittest.TestCase):
         self.assertIn("Africa", averages.index)
         self.assertAlmostEqual(averages.loc["Africa", "Literacy_Rate"], 87)  # Average for Africa
 
-# Run tests
+# Run tests in main
 if __name__ == "__main__":
     unittest.main()

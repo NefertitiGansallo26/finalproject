@@ -99,7 +99,7 @@ ax1.bar(
     label='GDP per Capita'
 )
 ax1.set_xlabel('Continent', fontsize=14)
-ax1.set_ylabel('GDP per Capita (USD)', fontsize=14, color='orange')
+ax1.set_ylabel('Average GDP per Capita (USD)', fontsize=14, color='orange')
 ax1.tick_params(axis='y', labelcolor='orange')
 
 # Add secondary axis for Literacy Rate
@@ -112,7 +112,7 @@ ax2.plot(
     linewidth=2,
     label='Literacy Rate'
 )
-ax2.set_ylabel('Literacy Rate (%)', fontsize=14, color='purple')
+ax2.set_ylabel('Average Literacy Rate (%)', fontsize=14, color='purple')
 ax2.tick_params(axis='y', labelcolor='purple')
 
 # Add legends
