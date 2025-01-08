@@ -3,7 +3,7 @@ import pandas as pd
 
 class TestPlotPipeline(unittest.TestCase):
     def setUp(self):
-        self.file_path = "test_data.csv"
+        self.file_path = 'Data/literacy-rate-vs-gdp-per-capita.csv'
         self.sample_data = pd.DataFrame({
             "Entity": ["South Africa", "India", "Germany", "Unknown Country"],
             "Adult literacy rate, population 15+ years, both sexes (%), LR.AG15T99": [87, 74, 99, None],
