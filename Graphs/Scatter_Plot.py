@@ -60,7 +60,7 @@ scatter = sns.scatterplot(
     y='GDP_Per_Capita',
     hue='Continent',
     palette='Set2',
-    s=20  # Adjusted point size
+    s=30  # Adjusted point size
 )
 
 # Regression Line
