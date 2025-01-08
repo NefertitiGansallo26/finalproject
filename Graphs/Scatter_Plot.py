@@ -84,4 +84,4 @@ plt.xlabel('Literacy Rate (%)', fontsize=14)
 plt.ylabel('GDP per Capita (USD)', fontsize=14)
 plt.grid(True, linestyle='--', alpha=0.7)
 plt.tight_layout()
-plt.show()
+plt.show() # show plot
