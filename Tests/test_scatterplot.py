@@ -7,7 +7,8 @@ class TestScatterPlot(unittest.TestCase):
 
     def setUp(self):
         """Load and preprocess the dataset for each test."""
-        file_path = r'C:\Users\Theresa Gansallo\OneDrive\Documents\UNI 2nd year\PROFESSIONAL SOFTWARE AND CAREER PRACTICES(Edward)\Final_Project\Data\literacy-rate-vs-gdp-per-capita.csv'
+        file_path ='Data/literacy-rate-vs-gdp-per-capita.csv'
+
         self.data = pd.read_csv(file_path)
         self.data = self.data.rename(columns={
             "Adult literacy rate, population 15+ years, both sexes (%), LR.AG15T99": "Literacy_Rate",
