@@ -50,6 +50,10 @@ data['Continent'] = data['Entity'].map(continent_mapping)
 # Filter for valid data and mapped countries
 data = data.dropna(subset=['Literacy_Rate', 'GDP_Per_Capita', 'Continent'])
 
+# Calculate Correlation Coefficient
+correlation = data['Literacy_Rate'].corr(data['GDP_Per_Capita'])
+print(f"Correlation Coefficient between Literacy Rate and GDP per Capita: {correlation:.3f}")
+
 # Scatter Plot with More Countries
 plt.figure(figsize=(12, 8))
 
