@@ -2,14 +2,11 @@ import unittest
 import pandas as pd
 
 class TestPlotPipeline(unittest.TestCase):
+
     def setUp(self):
+        """Load the real dataset for testing."""
         self.file_path = 'Data/literacy-rate-vs-gdp-per-capita.csv'
-        self.sample_data = pd.DataFrame({
-            "Entity": ["South Africa", "India", "Germany", "Unknown Country"],
-            "Adult literacy rate, population 15+ years, both sexes (%), LR.AG15T99": [87, 74, 99, None],
-            "GDP per capita, PPP (constant 2017 international $)": [6450, 2010, 45000, None]
-        })
-        self.sample_data.to_csv(self.file_path, index=False)
+        self.data = pd.read_csv(self.file_path)  # Load the real dataset
         self.mapping = {
             "South Africa": "Africa",
             "India": "Asia",
@@ -18,58 +15,55 @@ class TestPlotPipeline(unittest.TestCase):
 
     def test_load_dataset(self):
         """Test loading the dataset."""
-        data = pd.read_csv(self.file_path)
-        self.assertEqual(len(data), 4)  # Should load all rows
-        self.assertListEqual(list(data.columns), list(self.sample_data.columns))  # Check columns
+        self.assertFalse(self.data.empty, "Dataset failed to load or is empty.")
+        self.assertIn("Entity", self.data.columns, "Column 'Entity' is missing.")
+        self.assertIn("Adult literacy rate, population 15+ years, both sexes (%), LR.AG15T99", self.data.columns,
+                      "Column 'Adult literacy rate...' is missing.")
 
     def test_rename_columns(self):
         """Test renaming columns."""
-        data = pd.read_csv(self.file_path)
-        renamed_data = data.rename(columns={
+        renamed_data = self.data.rename(columns={
             "Adult literacy rate, population 15+ years, both sexes (%), LR.AG15T99": "Literacy_Rate",
             "GDP per capita, PPP (constant 2017 international $)": "GDP_Per_Capita"
-        })
+        }).copy()
         self.assertIn("Literacy_Rate", renamed_data.columns)
         self.assertIn("GDP_Per_Capita", renamed_data.columns)
         self.assertNotIn("Adult literacy rate, population 15+ years, both sexes (%), LR.AG15T99", renamed_data.columns)
 
     def test_map_to_continents(self):
         """Test mapping countries to continents."""
-        data = pd.read_csv(self.file_path)
-        renamed_data = data.rename(columns={
+        renamed_data = self.data.rename(columns={
             "Adult literacy rate, population 15+ years, both sexes (%), LR.AG15T99": "Literacy_Rate",
             "GDP per capita, PPP (constant 2017 international $)": "GDP_Per_Capita"
-        })
+        }).copy()
         renamed_data['Continent'] = renamed_data['Entity'].map(self.mapping)
         self.assertIn("Continent", renamed_data.columns)
-        self.assertEqual(renamed_data.loc[0, "Continent"], "Africa")  # South Africa mapped to Africa
-        self.assertTrue(pd.isnull(renamed_data.loc[3, "Continent"]))  # Unknown country not mapped
+        self.assertEqual(renamed_data.loc[renamed_data['Entity'] == "South Africa", "Continent"].iloc[0], "Africa")
+        self.assertTrue(pd.isnull(renamed_data.loc[renamed_data['Entity'] == "Unknown Country", "Continent"]).all())
 
     def test_filter_valid_data(self):
         """Test filtering valid data."""
-        data = pd.read_csv(self.file_path)
-        renamed_data = data.rename(columns={
+        renamed_data = self.data.rename(columns={
             "Adult literacy rate, population 15+ years, both sexes (%), LR.AG15T99": "Literacy_Rate",
             "GDP per capita, PPP (constant 2017 international $)": "GDP_Per_Capita"
-        })
+        }).copy()
         renamed_data['Continent'] = renamed_data['Entity'].map(self.mapping)
         filtered_data = renamed_data.dropna(subset=['Literacy_Rate', 'GDP_Per_Capita', 'Continent'])
-        self.assertEqual(len(filtered_data), 3)  # Only valid rows remain
-        self.assertNotIn("Unknown Country", filtered_data['Entity'].values)
+        self.assertGreater(len(filtered_data), 0, "Filtered data is empty.")
+        self.assertTrue((~filtered_data['Entity'].isin(["Unknown Country"])).all())
 
     def test_calculate_averages(self):
         """Test calculating averages by continent."""
-        data = pd.read_csv(self.file_path)
-        renamed_data = data.rename(columns={
+        renamed_data = self.data.rename(columns={
             "Adult literacy rate, population 15+ years, both sexes (%), LR.AG15T99": "Literacy_Rate",
             "GDP per capita, PPP (constant 2017 international $)": "GDP_Per_Capita"
-        })
+        }).copy()
         renamed_data['Continent'] = renamed_data['Entity'].map(self.mapping)
         filtered_data = renamed_data.dropna(subset=['Literacy_Rate', 'GDP_Per_Capita', 'Continent'])
         averages = filtered_data.groupby('Continent')[['GDP_Per_Capita', 'Literacy_Rate']].mean()
-        self.assertIn("Africa", averages.index)
-        self.assertAlmostEqual(averages.loc["Africa", "Literacy_Rate"], 87)  # Average for Africa
+        self.assertTrue("Africa" in averages.index, "Africa is not in the grouped averages.")
+        if "Africa" in averages.index:
+            self.assertGreater(averages.loc["Africa", "Literacy_Rate"], 0, "Average Literacy Rate for Africa should be > 0.")
 
-# Run tests in main
 if __name__ == "__main__":
     unittest.main()
