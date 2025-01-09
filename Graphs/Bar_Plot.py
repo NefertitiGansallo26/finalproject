@@ -2,17 +2,17 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Load your dataset
+# loading my dataset
 file_path = r'C:\Users\Theresa Gansallo\OneDrive\Documents\UNI 2nd year\PROFESSIONAL SOFTWARE AND CAREER PRACTICES(Edward)\Final_Project\Data\literacy-rate-vs-gdp-per-capita.csv'
 data = pd.read_csv(file_path)
 
-# Rename columns for simplicity
+# renaming the dataset columns to shorter names
 data = data.rename(columns={
     "Adult literacy rate, population 15+ years, both sexes (%), LR.AG15T99": "Literacy_Rate",
     "GDP per capita, PPP (constant 2017 international $)": "GDP_Per_Capita"
 })
 
-# Comprehensive mapping of all countries to continents
+# mapping all countries to continents
 continent_mapping = {
     # Africa
     'Algeria': 'Africa', 'Angola': 'Africa', 'Benin': 'Africa', 'Botswana': 'Africa',
@@ -79,19 +79,25 @@ continent_mapping = {
     'Tonga': 'Oceania', 'Tuvalu': 'Oceania', 'Vanuatu': 'Oceania'
 }
 
-# Map countries to continents
 data['Continent'] = data['Entity'].map(continent_mapping)
 
-# Filter for valid data and mapped countries
+# removing rows with missing values
 data = data.dropna(subset=['Literacy_Rate', 'GDP_Per_Capita', 'Continent'])
 
-# Group by continent and calculate averages
+# calculating standard deviation for GDP_Per_Capita and Literacy_Rate
+std_gdp_per_capita = data['GDP_Per_Capita'].std()
+std_literacy_rate = data['Literacy_Rate'].std()
+
+print(f"Standard Deviation of GDP per Capita: {std_gdp_per_capita:.2f}")
+print(f"Standard Deviation of Literacy Rate: {std_literacy_rate:.2f}")
+
+# calculating averages of both columns for each continent 
 continent_averages = data.groupby('Continent')[['GDP_Per_Capita', 'Literacy_Rate']].mean()
 
-# Create a dual-axis bar chart
+# creating a dual axis bar chart
 fig, ax1 = plt.subplots(figsize=(9, 7))
 
-# Plot GDP per Capita
+# plotting GDP per Capita data
 ax1.bar(
     continent_averages.index,
     continent_averages['GDP_Per_Capita'],
@@ -102,7 +108,7 @@ ax1.set_xlabel('Continent', fontsize=14)
 ax1.set_ylabel('Average GDP per Capita (USD)', fontsize=14, color='orange')
 ax1.tick_params(axis='y', labelcolor='orange')
 
-# Add secondary axis for Literacy Rate
+# plotting second axis for Literacy Rate
 ax2 = ax1.twinx()
 ax2.plot(
     continent_averages.index,
@@ -115,13 +121,12 @@ ax2.plot(
 ax2.set_ylabel('Average Literacy Rate (%)', fontsize=14, color='purple')
 ax2.tick_params(axis='y', labelcolor='purple')
 
-# Add legends
+# adding legends for clarity
 ax1.legend(loc='upper left')
 ax2.legend(loc='upper right')
 
-# Title and Grid
+# adding title and grid 
 plt.title('GDP per Capita and Literacy Rate by Continent', fontsize=16)
 plt.grid(axis='x', linestyle='--', alpha=0.7)
 plt.tight_layout()
-
 plt.show()

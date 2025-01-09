@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 
 class TestScatterPlot(unittest.TestCase):
 
+#loading the dataset for testing
     def setUp(self):
-        """Load and preprocess the dataset for each test."""
         file_path ='Data/literacy-rate-vs-gdp-per-capita.csv'
 
         self.data = pd.read_csv(file_path)
@@ -15,35 +15,35 @@ class TestScatterPlot(unittest.TestCase):
             "GDP per capita, PPP (constant 2017 international $)": "GDP_Per_Capita"
         })
         self.continent_mapping = {
-            # Africa
             'South Africa': 'Africa', 'Nigeria': 'Africa', 'Egypt': 'Africa', 'Kenya': 'Africa',
-            # Add other continents as needed
             'Australia': 'Oceania', 'New Zealand': 'Oceania'
         }
         self.data['Continent'] = self.data['Entity'].map(self.continent_mapping)
         self.data = self.data.dropna(subset=['Literacy_Rate', 'GDP_Per_Capita', 'Continent'])
 
+#Testing if the dataset loads properly
     def test_dataset_loading(self):
-        """Test if the dataset is loaded successfully."""
         self.assertFalse(self.data.empty, "Dataset failed to load or is empty.")
 
+
+#Testing if the columns have been renamed correctly 
     def test_column_renaming(self):
-        """Test if the critical columns are renamed correctly."""
         self.assertIn("Literacy_Rate", self.data.columns, "Column 'Literacy_Rate' is missing.")
         self.assertIn("GDP_Per_Capita", self.data.columns, "Column 'GDP_Per_Capita' is missing.")
 
+#Testing if countries have been mapped to their continent
     def test_continent_mapping(self):
-        """Test if all rows have a valid continent after mapping."""
         unmapped = self.data[self.data['Continent'].isnull()]
         self.assertTrue(unmapped.empty, "Some rows are not mapped to a continent.")
 
+#Testing if the data has been filtered correctly
     def test_valid_data_filtering(self):
-        """Test if there are no NaN values in the filtered dataset."""
         self.assertFalse(self.data[['Literacy_Rate', 'GDP_Per_Capita', 'Continent']].isnull().any().any(),
                          "Filtered data contains NaN values.")
+        
 
+#Testing if scatter plot has the correct number of colours to match each continent 
     def test_scatterplot_colors(self):
-        """Test if scatter plot has the correct number of colors (one per continent)."""
         plt.figure()
         scatter = sns.scatterplot(
             data=self.data,
@@ -53,7 +53,7 @@ class TestScatterPlot(unittest.TestCase):
             palette='Set2'
         )
 
-        # Add the regression line
+        # Adding regression line
         sns.regplot(
             data=self.data,
             x='Literacy_Rate',
@@ -63,10 +63,10 @@ class TestScatterPlot(unittest.TestCase):
             line_kws={"label": "Regression Line"}
         )
 
-        # Create legend
+        # Creating legend
         plt.legend(title='Continent', bbox_to_anchor=(1.05, 1), loc='upper left')
 
-        # Count only the continent-related legend items
+        # Counting only the continents in the legend
         legend_labels = [t.get_text() for t in scatter.legend_.texts if t.get_text() != "Regression Line"]
         unique_continents = len(self.data['Continent'].unique())
         
