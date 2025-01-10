@@ -4,7 +4,7 @@
 #### .circeci folder contains config file used to connect to circeci pipeline.
 
 #### Data folder contains csv documentation of data used to create graphs and perfom an analysis. The name of the csv file in this folder is : 
--literacy-rate-vs-gdp-per-capita
+-literacy-rate-vs-gdp-per-capita.csv
 
 #### Graphs folder contains all of the code used to create the two graphs which are used for analysis.The file names of the graphs are:
 -Bar_Plot.py
