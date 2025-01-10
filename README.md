@@ -4,19 +4,19 @@
 #### .circeci folder contains config file used to connect to circeci pipeline.
 
 #### Data folder contains csv documentation of data used to create graphs and perfom an analysis. The name of the csv file in this folder is : 
--literacy-rate-vs-gdp-per-capita.csv
+- literacy-rate-vs-gdp-per-capita.csv
 
 #### Graphs folder contains all of the code used to create the two graphs which are used for analysis.The file names of the graphs are:
--Bar_Plot.py
--Scatter_Plot.py
+- Bar_Plot.py
+- Scatter_Plot.py
 
 #### Images folder contains two images of the two graphs. The file names for the images are:
--Image_1.png
--Image_2.png
+- Image_1.png
+- Image_2.png
 
 #### Tests folder contains unit tests for the codes for the graphs. The file names for the unit tests are:
--test_barplot.py
--test_scatterplot.py
+- test_barplot.py
+- test_scatterplot.py
 
 ## Data sources:
 Our World in Data: https://ourworldindata.org/grapher/literacy-rate-vs-gdp-per-capita
