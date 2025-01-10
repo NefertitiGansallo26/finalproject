@@ -1,4 +1,32 @@
-#key tests for the code to pass
-10 tests in total
-5 first plot:
-5 second plot:
+Key tests for the code to pass:
+
+1.Test: loading the dataset properly 
+File: Tests/test_barplot.py 
+Description:checks if the dataset has been loaded properly
+Expected outcome:dataset loads sucessfully with no missing data
+
+2.Test: column renaming
+File: Tests/test_barplot.py 
+Description:checks that the columns have been renamed correctly to shorter names
+Expected outcome: column names updated with new names 
+
+3.Test: country to continent mapping 
+File: Tests/test_scatterplot.py 
+Description: checks that countries in the dataset have been correctly mapped to their continent
+Expected outcome:all countries in dataset are mapped to their correct continents 
+
+4.Test: data filtering
+File: Tests/test_scatterplot.py 
+Description:checks if any originally missing data in dataset columns has been removed 
+Expected outcome: any missing data in columns are removed from dataset
+
+5.Test: colour matching to continents
+File: Tests/test_scatterplot.py 
+Description:checks that each continent has been assigned to a colour 
+Expected outcome:each continent has a representative colour in the scatter plot and legend
+
+6.Test: calculating averages
+File: Tests/test_barplot.py 
+Description:checks if average gdp per capita and average literacy rate has been calculated for each continent 
+Expected outcome:average gdp per capita and average literacy rate calculated and displayed for each continent 
+
